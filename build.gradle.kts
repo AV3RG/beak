@@ -1,3 +1,5 @@
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+
 plugins {
     kotlin("jvm") version "1.9.23"
     id("java-gradle-plugin")
@@ -21,19 +23,9 @@ kotlin {
     jvmToolchain(8)
 }
 
-configurations {
-    compileClasspath {
-        dependencies.remove(project.dependencies.gradleApi())
-        dependencies.remove(project.dependencies.localGroovy())
-    }
-    runtimeClasspath {
-        dependencies.remove(project.dependencies.gradleApi())
-        dependencies.remove(project.dependencies.localGroovy())
-    }
-    implementation {
-        dependencies.remove(project.dependencies.gradleApi())
-        dependencies.remove(project.dependencies.localGroovy())
-    }
+val relocatePrefix = "gg.rohan.beak.libs"
+fun relocateDep(from: String, to: String = "${relocatePrefix}.${from.split(".").last()}"): ShadowJar {
+    return tasks.shadowJar.get().relocate(from, to)
 }
 
 tasks {
@@ -42,10 +34,31 @@ tasks {
         archiveClassifier.set("")
         archiveVersion.set("")
 
-        include(
-            "gg/rohan/beak/**/*",
-            "com/squareup/retrofit2/**/*",
-        )
+        val inclusions = sequenceOf("gg/rohan/beak", "com/github/mwiede/jsch", "com/squareup/retrofit2/retrofit", "com/squareup/okhttp3/okhttp", "com/squareup/okio/okio","org/jetbrains/kotlinx/kotlinx-coroutines-core")
+        .map { it.split('/' ) }
+        .map {
+            var inc = 0
+            it.fold(mutableListOf<String>()) { acc, it ->
+                for (a in acc.filter { it.split('/').size == inc }) {
+                    acc += "$a/$it"
+                }
+                acc += it
+                inc++
+                acc
+            }
+
+        }
+        .flatten().toList()
+
+        include { dep ->
+            inclusions.any { dep.path.startsWith(it) }
+        }
+
+        relocateDep("retrofit2")
+        relocateDep("okhttp3")
+        relocateDep("okio")
+        relocateDep("kotlinx")
+        relocateDep("com.jcraft.jsch")
 
     }
 
