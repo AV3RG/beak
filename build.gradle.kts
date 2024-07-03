@@ -18,6 +18,8 @@ dependencies {
     implementation("com.squareup.retrofit2:retrofit:2.11.0")
     implementation("com.github.mwiede:jsch:0.2.18")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0-RC")
+    implementation("com.google.code.gson:gson:2.11.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.11.0")
 }
 
 kotlin {
@@ -62,10 +64,12 @@ tasks {
         val inclusions = sequenceOf(
             "gg/rohan/beak",
             "com/github/mwiede/jsch",
+            "com/squareup/retrofit2/converter/gson",
             "com/squareup/retrofit2/retrofit",
             "com/squareup/okhttp3/okhttp",
             "com/squareup/okio/okio",
-            "org/jetbrains/kotlinx/kotlinx-coroutines-core"
+            "org/jetbrains/kotlinx/kotlinx-coroutines-core",
+            "com/google/code/gson/gson",
         )
         .map { it.split('/' ) }
         .map { sections ->
@@ -92,7 +96,7 @@ tasks {
         relocateDep("okio")
         relocateDep("kotlinx")
         relocateDep("com.jcraft.jsch")
-
+        relocateDep("com.google")
     }
 
     assemble {

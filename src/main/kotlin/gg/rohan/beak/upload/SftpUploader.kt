@@ -20,7 +20,7 @@ class SftpUploader(serverInfo: ServerInfo, sftpSettings: SftpSettings): FileUplo
         jSch.setKnownHosts(sftpSettings.knownHostsFile.absolutePathString())
         val session = jSch.getSession(sftpSettings.username, sftpSettings.hostname, sftpSettings.port)
         session.setPassword(sftpSettings.password)
-        session.connect(timeout)
+        session.connect(timeout * 1000)
         channel = session.openChannel("sftp") as ChannelSftp
         channel.connect(timeout)
     }

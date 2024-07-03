@@ -1,21 +1,18 @@
 package gg.rohan.beak.pterodactyl
 
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Path
-import retrofit2.http.Query
-import retrofit2.http.Url
+import okhttp3.MultipartBody
+import retrofit2.http.*
 
 interface PteroService {
 
-    @POST("/servers/{server}/power")
+    @POST("/api/client/servers/{server}/power")
     suspend fun changePowerState(@Path("server") server: String, @Body action: PowerState)
 
-    @GET("/servers/{server}/files/upload")
-    suspend fun createUploadUrl(@Path("server") server: String): String
+    @GET("/api/client/servers/{server}/files/upload")
+    suspend fun createUploadUrl(@Path("server") server: String): UploadUrlResponse
 
+    @Multipart
     @POST
-    suspend fun uploadFile(@Url url: String, @Query("directory") directory: String?, @Body file: ByteArray)
+    suspend fun uploadFile(@Url url: String, @Query("directory") directory: String?, @Part filePart: MultipartBody.Part)
 
 }
