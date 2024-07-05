@@ -1,6 +1,8 @@
 package gg.rohan.beak.pterodactyl
 
-enum class PowerState {
+import com.google.gson.annotations.SerializedName
+
+internal enum class PowerState {
 
     START,
     STOP,
@@ -11,4 +13,8 @@ enum class PowerState {
     override fun toString(): String {
         return name.lowercase()
     }
+}
+
+internal class PowerStateBody(@SerializedName("signal") internal val signal: String) {
+    constructor(state: PowerState): this(state.toString().lowercase())
 }

@@ -1,6 +1,7 @@
 package gg.rohan.beak
 
 import gg.rohan.beak.pterodactyl.PowerState
+import gg.rohan.beak.pterodactyl.PowerStateBody
 import gg.rohan.beak.upload.HttpUploader
 import gg.rohan.beak.upload.SftpUploader
 import kotlinx.coroutines.*
@@ -28,7 +29,10 @@ class BeakPlugin: Plugin<Project> {
                                 }
                                 val uploadFuture = uploader.upload(currentServer.uploadMapping)
                                 uploadFuture.join()
-                                if (!currentServer.dontRestart) currentServer.httpSettings.pteroService.changePowerState(currentServer.serverId, PowerState.RESTART)
+                                if (!currentServer.dontRestart) {
+                                    currentServer.httpSettings.pteroService.changePowerState(currentServer.serverId, PowerStateBody(PowerState.RESTART))
+                                    println("Restarted server ${currentServer.serverId}")
+                                }
                             }
                         }.toList()
                         jobs.forEach { it.join() }

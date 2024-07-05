@@ -3,10 +3,10 @@ package gg.rohan.beak.pterodactyl
 import okhttp3.MultipartBody
 import retrofit2.http.*
 
-interface PteroService {
+internal interface PteroService {
 
     @POST("/api/client/servers/{server}/power")
-    suspend fun changePowerState(@Path("server") server: String, @Body action: PowerState)
+    suspend fun changePowerState(@Path("server") server: String, @Body action: PowerStateBody)
 
     @GET("/api/client/servers/{server}/files/upload")
     suspend fun createUploadUrl(@Path("server") server: String): UploadUrlResponse
