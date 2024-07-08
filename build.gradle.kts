@@ -115,7 +115,7 @@ tasks {
 }
 
 gradlePlugin {
-    website.set("https://github.com/AV3RG/beak")
+    website.set("https://github.com/AV3RG/beak/wiki")
     vcsUrl.set("https://github.com/AV3RG/beak")
     plugins {
         create("beak") {
